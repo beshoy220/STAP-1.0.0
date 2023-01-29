@@ -640,7 +640,8 @@ class Database {
     return ref.child('/parent_feed/$email/sessions/quit_request').once();
   }
 
-  presnces(String email, String today, bool check) {
+  presnces(String email, String today, int todayNum, bool check) {
+    print(todayNum);
     ref.child('parent_feed/$email/presence/$today').once().then((value) {
       if (value.snapshot.value == null) {
         List list = [];

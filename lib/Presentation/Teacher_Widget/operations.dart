@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -9,10 +8,7 @@ import 'package:school_manager/Data/Firebase/real_time_db.dart';
 import 'package:school_manager/Data/Local_providers/gades_classes.dart';
 import 'package:school_manager/Data/Local_providers/options_operations.dart';
 import 'package:school_manager/Data/Local_providers/quiz_type.dart';
-import 'package:school_manager/Presentation/Screens/home_panal.dart';
 import 'package:school_manager/Presentation/Screens/teacher_panel.dart';
-import 'package:http/http.dart' as http;
-import 'package:school_manager/main.dart';
 
 ///
 ///
@@ -787,7 +783,8 @@ class _PresencesCheckState extends State<PresencesCheck> {
   bool selectAll = false;
   List<bool> checkBoxs = [];
   List<String> emails = [];
-  String today =
+  int todayNum = DateTime.now().weekday;
+  String todayDate =
       '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
 
   @override
@@ -918,7 +915,8 @@ class _PresencesCheckState extends State<PresencesCheck> {
                     onPressed: () {
                       for (var i = 0; i < checkBoxs.length; i++) {
                         // print(checkBoxs[i]);
-                        Database().presnces(emails[i], today, checkBoxs[i]);
+                        Database().presnces(
+                            emails[i], todayDate, todayNum, checkBoxs[i]);
                       }
                       Navigator.pop(context);
                     },
