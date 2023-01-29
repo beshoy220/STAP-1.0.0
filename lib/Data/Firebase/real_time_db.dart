@@ -492,7 +492,7 @@ class Database {
   sendPrivateMessageToParent(String grade, String classs, String id,
       String from, String title, String body, String status) {
     if (from.toString().split('-').first == 'admin') {
-      return ref.child('parent_feed/$id/community/private_message').push().set({
+      ref.child('parent_feed/$id/community/private_message').push().set({
         'from': 'ADMIN',
         'title': title,
         'body': body,
@@ -527,7 +527,7 @@ class Database {
   sendPuplicMessageToParent(String grade, String classs, String id, String from,
       String title, String body, String status) {
     if (from.toString().split('-').first == 'admin') {
-      return ref.child('parent_feed/$id/community/public_message').push().set({
+      ref.child('parent_feed/$id/community/public_message').push().set({
         'from': "ADMIN",
         'title': title,
         'body': body,
