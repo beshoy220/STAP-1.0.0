@@ -119,7 +119,7 @@ class Database {
       ref.child('user_email_num').update({'teacher': newuserAcc});
       //
       Auth().createUserWithEmailAndPassword(
-          email: 'tc-$newuserAcc$i@school.com', password: 'password');
+          email: 'tc-$newuserAcc$i@school.com', password: nationalId);
 
       var newUserNode = {
         'name': name,
