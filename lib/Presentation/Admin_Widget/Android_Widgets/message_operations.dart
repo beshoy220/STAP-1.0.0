@@ -606,6 +606,7 @@ class _PrivateMessageFormState extends State<PrivateMessageForm> {
 
   @override
   Widget build(BuildContext context) {
+    // print(Auth().currentUser!.email!.split('@').first);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppMeta.appName),
@@ -778,7 +779,7 @@ class _PrivateMessageFormState extends State<PrivateMessageForm> {
                             widget.grade,
                             widget.classs,
                             widget.messageTo[i],
-                            Auth().currentUser!.email!.split('@').first,
+                            'admin-somebody',
                             _controllerForMessageTitle.text,
                             _controllerForMessageBody.text,
                             finalStatus);
@@ -1201,7 +1202,7 @@ class _PublicMessageFormState extends State<PublicMessageForm> {
                             widget.grade,
                             widget.classs,
                             widget.messageTo[i],
-                            Auth().currentUser!.email!.split('@').first,
+                            'admin-somebody',
                             _controllerForMessageTitle.text,
                             _controllerForMessageBody.text,
                             finalStatus);

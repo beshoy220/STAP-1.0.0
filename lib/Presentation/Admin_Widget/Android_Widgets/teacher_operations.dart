@@ -228,14 +228,15 @@ class _AddTeacherState extends State<AddTeacher> {
                               keyboardType: TextInputType.name,
                             ),
                             TextField(
-                              controller: forms[index]['subject_controller'],
+                              controller: forms[index]['religion_controller'],
                               onChanged: (value) {},
                               decoration: InputDecoration(
                                   labelText: "Enter Religion".tr()),
                               keyboardType: TextInputType.name,
                             ),
                             TextField(
-                              controller: forms[index]['subject_controller'],
+                              controller: forms[index]
+                                  ['national_id_controller'],
                               onChanged: (value) {},
                               decoration: InputDecoration(
                                   labelText: "Enter Teacher National ID".tr()),
@@ -476,6 +477,7 @@ class _AddTeacherState extends State<AddTeacher> {
                 width: MediaQuery.of(context).size.width,
                 child: OutlinedButton(
                     onPressed: () {
+                      // print(forms[0]['national_id_controller'].text);
                       for (int i = 0; i < numOfForms; i++) {
                         Database().registeUserAccWithIcromentForTeacher(
                             forms[i]['name_controller'].text,
@@ -495,12 +497,6 @@ class _AddTeacherState extends State<AddTeacher> {
                                 builder: (BuildContext context) =>
                                     const AdminPanal()),
                             (Route<dynamic> route) => route is AdminPanal);
-
-                        // setState(() {
-                        //   errorMessage =
-                        //       'The national ID or phone nuber is not filled correctly (More or less than expected numbers)';
-                        // });
-
                       }
                       final snackBar = SnackBar(
                         content: Text('All users have been saved !'.tr()),

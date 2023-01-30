@@ -282,12 +282,10 @@ class Database {
 // CLASS : classs
 // GRADE : grade
     for (var i = 0; i < 8; i++) {
-      (data[i]['teacher'].toString().split('_').last == '--')
-          ? ""
-          : ref.child('sessions_teacher/').update({
-              's${i + 1}_${grade}_${classs}_$day':
-                  data[i]['teacher'].toString().split('_').last
-            });
+      ref.child('sessions_teacher/').update({
+        's${i + 1}_${grade}_${classs}_$day':
+            data[i]['teacher'].toString().split('_').last
+      });
     }
 
     ///
@@ -641,7 +639,26 @@ class Database {
   }
 
   presnces(String email, String today, int todayNum, bool check) {
-    print(todayNum);
+    // switch (todayNum) {
+    // case 6:
+    //   dayOfweek = 1;
+
+    //   break;
+    // case 1:
+    //   dayOfweek = 2;
+
+    //   break;
+    // case 2:
+    //   dayOfweek = 3;
+    //   break;
+    // case 3:
+    //   dayOfweek = 4;
+    //   break;
+    // case 4:
+    //   dayOfweek = 5;
+    //   break;
+    // default:
+    // }
     ref.child('parent_feed/$email/presence/$today').once().then((value) {
       if (value.snapshot.value == null) {
         List list = [];
