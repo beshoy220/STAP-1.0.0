@@ -7,7 +7,6 @@ import 'package:school_manager/App/meta.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
 import 'package:school_manager/Data/Local_providers/options_operations.dart';
 import 'package:school_manager/Presentation/Screens/admin_panal.dart';
-import 'package:school_manager/Presentation/Screens/forget_student_teacher_pass.dart';
 import 'package:school_manager/Presentation/Screens/home_panal.dart';
 import 'package:school_manager/Presentation/Screens/report_error.dart';
 import 'package:school_manager/Presentation/Screens/teacher_panel.dart';
@@ -64,9 +63,7 @@ class Welcome extends StatelessWidget {
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25)),
                     Text(
-                        AppMeta.appName + ' '+
-                            'is a simple and easy application designed to track your children\'s progress at school. \n\n\nWe use simple nice smooth colors to illustrate student\'s status Just by signing in \n\n\nAll interactions are presence too such as: messaging, voting and evaluation in the application '
-                                .tr(),
+                        '${AppMeta.appName} ${'is a simple and easy application designed to track your children\'s progress at school. \n\n\nWe use simple nice smooth colors to illustrate student\'s status Just by signing in \n\n\nAll interactions are presence too such as: messaging, voting and evaluation in the application '.tr()}',
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15)),
                   ],
@@ -86,8 +83,7 @@ class Welcome extends StatelessWidget {
                       const Icon(Icons.arrow_back_ios, color: Colors.white),
                       Text(
                         'Swipe to continue!'.tr(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
