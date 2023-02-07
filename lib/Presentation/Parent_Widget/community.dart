@@ -135,29 +135,11 @@ class Votes extends StatefulWidget {
 }
 
 class _VotesState extends State<Votes> {
-  String grade = 'grade 1';
-  String classs = 'class 1';
   String email = Auth().currentUser!.email!.split('@').first;
 
   @override
   void initState() {
     super.initState();
-    // Database()
-    //     .ref
-    //     .child('parent_feed/$email/Messages_votes')
-    //     .onValue
-    //     .listen((event) {
-    //   Map mapping = event.snapshot.value as Map;
-    //   setState(() {
-    //     grade = mapping['grade'].toString();
-    //     classs = mapping['class'].toString();
-    //   });
-    // }).onError((e) {
-    //   setState(() {
-    //     grade = '';
-    //     classs = '';
-    //   });
-    // });
   }
 
   @override
@@ -175,7 +157,7 @@ class _VotesState extends State<Votes> {
           ],
         ),
       ),
-      query: Database().getVotesForParent(grade, classs, email),
+      query: Database().getVotesForParent(email),
       itemBuilder: (context, snapshot, animation, index) {
         Map mappingValue = snapshot.value as Map;
         int voters1 = mappingValue['option1']['num_of_voters'] + 1;

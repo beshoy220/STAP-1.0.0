@@ -10,6 +10,7 @@ import 'package:school_manager/Presentation/Screens/admin_panal.dart';
 import 'package:school_manager/Presentation/Screens/home_panal.dart';
 import 'package:school_manager/Presentation/Screens/report_error.dart';
 import 'package:school_manager/Presentation/Screens/teacher_panel.dart';
+import 'package:school_manager/main.dart';
 
 class WelcomeSingInMobile extends StatefulWidget {
   const WelcomeSingInMobile({Key? key}) : super(key: key);
@@ -442,6 +443,7 @@ class _SignInState extends State<SignIn> {
                   height: 40,
                   child: ElevatedButton(
                       onPressed: () {
+                        // sendNotification();
                         String emailId = [
                           myControllerForStudentId.text,
                           '@',

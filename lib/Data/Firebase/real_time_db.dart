@@ -592,7 +592,7 @@ class Database {
     return ref.child('parent_feed/$email/sessions/day${indexDay + 1}/sessions');
   }
 
-  getVotesForParent(String grade, String classs, String email) {
+  getVotesForParent(String email) {
     return ref.child('/parent_feed/$email/community/vote');
   }
 

@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_manager/App/meta.dart';
@@ -11,11 +12,21 @@ import 'package:school_manager/Services/Theme/theme.dart';
 import 'package:school_manager/Presentation/Admin_Widget/Windows_Widgets/welcome_page_windows.dart';
 import 'Presentation/Screens/welcome_sign_in_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'Data/Firebase/messaging.dart';
 
 void main() async {
+  // firebase initializeApp
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // cloud messaging
+  FirebaseMessaging.onBackgroundMessage(messageHandler);
+  firebaseMessagingListener();
+
   // language initializer
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
   // error handler
   ErrorWidget.builder = (FlutterErrorDetails error) {
     debugPrint(error.exception.toString());
@@ -26,8 +37,8 @@ void main() async {
   };
 
   // Firebase initializer [for Database]
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
 
   // root app
   runApp(EasyLocalization(
