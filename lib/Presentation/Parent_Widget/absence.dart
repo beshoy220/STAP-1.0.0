@@ -225,7 +225,6 @@ class AbsenceState extends State<Absence> {
                 switch (selectedDay.weekday) {
                   case 6:
                     dayOfweek = 1;
-
                     break;
                   case 1:
                     dayOfweek = 2;
@@ -334,7 +333,7 @@ class AbsenceState extends State<Absence> {
                           builder: (context, AsyncSnapshot snapshot) {
                             return ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data.snapshot.value.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return ((snapshot.data.snapshot.value

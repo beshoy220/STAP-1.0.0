@@ -780,6 +780,8 @@ class PresencesCheck extends StatefulWidget {
 }
 
 class _PresencesCheckState extends State<PresencesCheck> {
+  int dayOfweek = 0;
+  DateTime? _selectedDay = DateTime.now();
   bool selectAll = false;
   List<bool> checkBoxs = [];
   List<String> emails = [];
@@ -913,10 +915,28 @@ class _PresencesCheckState extends State<PresencesCheck> {
                 width: MediaQuery.of(context).size.width,
                 child: OutlinedButton(
                     onPressed: () {
+                      switch (_selectedDay!.weekday) {
+                        case 6:
+                          dayOfweek = 1;
+                          break;
+                        case 1:
+                          dayOfweek = 2;
+                          break;
+                        case 2:
+                          dayOfweek = 3;
+                          break;
+                        case 3:
+                          dayOfweek = 4;
+                          break;
+                        case 4:
+                          dayOfweek = 5;
+                          break;
+                        default:
+                      }
                       for (var i = 0; i < checkBoxs.length; i++) {
                         // print(checkBoxs[i]);
-                        Database().presnces(
-                            emails[i], todayDate, todayNum, checkBoxs[i]);
+                        Database().presnces(emails[i], todayDate, todayNum,
+                            checkBoxs[i], dayOfweek.toString());
                       }
                       Navigator.pop(context);
                     },

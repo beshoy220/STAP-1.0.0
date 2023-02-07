@@ -638,27 +638,9 @@ class Database {
     return ref.child('/parent_feed/$email/sessions/quit_request').once();
   }
 
-  presnces(String email, String today, int todayNum, bool check) {
-    // switch (todayNum) {
-    // case 6:
-    //   dayOfweek = 1;
+  presnces(String email, String today, int todayNum, bool check, String day) {
+    // print('DAY : ' + day.toString());
 
-    //   break;
-    // case 1:
-    //   dayOfweek = 2;
-
-    //   break;
-    // case 2:
-    //   dayOfweek = 3;
-    //   break;
-    // case 3:
-    //   dayOfweek = 4;
-    //   break;
-    // case 4:
-    //   dayOfweek = 5;
-    //   break;
-    // default:
-    // }
     ref.child('parent_feed/$email/presence/$today').once().then((value) {
       if (value.snapshot.value == null) {
         List list = [];
@@ -671,6 +653,16 @@ class Database {
           list3.add(element);
         }
         list3.add(check);
+        ref
+            .child('/parent_feed/$email/sessions/day$day/sessions/')
+            .once()
+            .then((value) {
+          List data = value.snapshot.value as List;
+          if (data[list3.length - 1].toString().split('_').first == 'Break') {
+            list3.add(check);
+            ref.child('parent_feed/$email/presence/$today').set(list3);
+          }
+        });
         ref.child('parent_feed/$email/presence/$today').set(list3);
       }
     });
