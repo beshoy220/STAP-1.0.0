@@ -649,12 +649,6 @@ class _AddStudentState extends State<AddStudent> {
                 width: MediaQuery.of(context).size.width,
                 child: OutlinedButton(
                     onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const AdminPanal()),
-                          (Route<dynamic> route) => route is AdminPanal);
                       final snackBar = SnackBar(
                         content: Text('All users have been saved !'.tr()),
                         action: SnackBarAction(
@@ -663,7 +657,6 @@ class _AddStudentState extends State<AddStudent> {
                           onPressed: () {},
                         ),
                       );
-
                       (numOfForms != 0)
                           ? ScaffoldMessenger.of(context).showSnackBar(snackBar)
                           : debugPrint('no Users');
@@ -680,6 +673,12 @@ class _AddStudentState extends State<AddStudent> {
                             forms[i]['birth_date'],
                             forms[i]['gender']);
                       }
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const AdminPanal()),
+                          (Route<dynamic> route) => route is AdminPanal);
                     },
                     child: Text('Save all at once'.tr())),
               ),
