@@ -5,6 +5,7 @@ import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:school_manager/App/meta.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
+import 'package:school_manager/Data/Firebase/messaging.dart';
 import 'package:school_manager/Data/Local_providers/options_operations.dart';
 import 'package:school_manager/Presentation/Screens/admin_panal.dart';
 import 'package:school_manager/Presentation/Screens/home_panal.dart';
@@ -444,6 +445,8 @@ class _SignInState extends State<SignIn> {
                   child: ElevatedButton(
                       onPressed: () {
                         // sendNotification();
+                        // Auth().signInWithCustomToken(token)
+                        // print(getToken());
                         String emailId = [
                           myControllerForStudentId.text,
                           '@',

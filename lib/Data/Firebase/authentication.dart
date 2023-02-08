@@ -7,8 +7,8 @@ class Auth {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  // Future<void> phoneCode() {
-  //   return _firebaseAuth.verifyPhoneNumber(verificationCompleted: verificationCompleted, verificationFailed: verificationFailed, codeSent: codeSent, codeAutoRetrievalTimeout: codeAutoRetrievalTimeout)
+  // Future<void> signInWithCustomToken(token) {
+  //   return _firebaseAuth.signInWithCustomToken(token);
   // }
 
   Future<void> signInWithEmailAndPassword({

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_manager/App/meta.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
+import 'package:school_manager/Data/Firebase/messaging.dart';
 import 'package:school_manager/Data/Local_providers/options_operations.dart';
 import 'package:school_manager/Presentation/Screens/change_password.dart';
 import 'package:school_manager/Services/Refresh/refresh.dart';
@@ -60,7 +61,9 @@ class _ParentPanelState extends State<ParentPanel> {
                     onSelected: (value) {
                       switch (value) {
                         case 1:
-                          Change().refresh;
+                          // requestPermission();
+                          // getToken();
+                          ThemeModel().refresh;
                           if (context.locale == const Locale('en', 'US')) {
                             // ignore: deprecated_member_use
                             context.locale = const Locale('ar', 'EG');

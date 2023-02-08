@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 abstract class AppMeta {
   static String schoolCode = '@school.com';
   static String version = '0.0.0+1';
-  static String appName = 'Kinder';
+  static String appName = 'Stap';
   static MaterialColor? color = Colors.indigo;
 }
 

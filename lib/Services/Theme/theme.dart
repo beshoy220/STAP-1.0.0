@@ -30,4 +30,11 @@ class ThemeModel extends ChangeNotifier {
         break;
     }
   }
+
+  bool refresh = false;
+
+  set ref(v) {
+    refresh = true;
+    notifyListeners();
+  }
 }

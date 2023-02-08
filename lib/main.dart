@@ -20,8 +20,10 @@ void main() async {
   await Firebase.initializeApp();
 
   // cloud messaging
-  FirebaseMessaging.onBackgroundMessage(messageHandler);
-  firebaseMessagingListener();
+  // FirebaseMessaging.onBackgroundMessage(messageHandler);
+  // firebaseMessagingListener();
+  foreground();
+  background();
 
   // language initializer
   WidgetsFlutterBinding.ensureInitialized();
