@@ -61,8 +61,9 @@ class _ParentPanelState extends State<ParentPanel> {
                     onSelected: (value) {
                       switch (value) {
                         case 1:
-                          // requestPermission();
-                          // getToken();
+                          getToken().then((value) {
+                            print(value);
+                          });
                           ThemeModel().refresh;
                           if (context.locale == const Locale('en', 'US')) {
                             // ignore: deprecated_member_use

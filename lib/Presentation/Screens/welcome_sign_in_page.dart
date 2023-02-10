@@ -82,7 +82,7 @@ class Welcome extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: Row(
                     children: [
-                      const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      const Icon(Icons.arrow_back_ios),
                       Text(
                         'Swipe to continue!'.tr(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
@@ -161,6 +161,8 @@ class _SignInState extends State<SignIn> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
+
+  String errorMessage = '';
 
   @override
   void initState() {
@@ -339,6 +341,13 @@ class _SignInState extends State<SignIn> {
     myControllerForStudentPassword.dispose();
   }
 
+  bool _showPassword = false;
+  void _togglevisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -363,10 +372,8 @@ class _SignInState extends State<SignIn> {
               ),
               Text(
                 AppMeta.appName,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               Container(
                 width: 130,
@@ -403,18 +410,32 @@ class _SignInState extends State<SignIn> {
                 padding:
                     const EdgeInsets.only(left: 18.0, right: 18.0, top: 18.0),
                 child: TextField(
-                  obscureText: true,
+                  obscureText: !_showPassword,
                   enableSuggestions: false,
                   autocorrect: false,
                   controller: myControllerForStudentPassword,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
                     labelText: 'Student/Teacher Password'.tr(),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        _togglevisibility();
+                      },
+                      child: Icon(
+                        _showPassword ? Icons.visibility : Icons.visibility_off,
+                        color: AppMeta.color,
+                      ),
+                    ),
                   ),
                 ),
               ),
+
               const SizedBox(
                 height: 10,
+              ),
+              Text(
+                errorMessage,
+                style: const TextStyle(color: Colors.red),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -496,6 +517,10 @@ class _SignInState extends State<SignIn> {
                               break;
                             default:
                           }
+                        }).onError((error, stackTrace) {
+                          setState(() {
+                            errorMessage = error.toString().split(']').last;
+                          });
                         });
                       },
                       child: Text('Sign in'.tr())),

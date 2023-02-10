@@ -22,6 +22,19 @@ class _ChangePasswordState extends State<ChangePassword> {
   TextEditingController rewritepasswordController = TextEditingController();
 
   String errorMessage = '';
+  bool _showPassword = true;
+  bool _showPassword2 = true;
+  void _togglevisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
+
+  void _togglevisibility2() {
+    setState(() {
+      _showPassword2 = !_showPassword2;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,22 +74,44 @@ class _ChangePasswordState extends State<ChangePassword> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: TextField(
-                      obscureText: true,
+                      obscureText: _showPassword,
                       controller: writepasswordController,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         labelText: 'Enter The New Password'.tr(),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            _togglevisibility();
+                          },
+                          child: Icon(
+                            _showPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: AppMeta.color,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: TextField(
-                      obscureText: true,
+                      obscureText: _showPassword2,
                       controller: rewritepasswordController,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         labelText: 'Re-Enter The New Password'.tr(),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            _togglevisibility2();
+                          },
+                          child: Icon(
+                            _showPassword2
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: AppMeta.color,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -86,7 +121,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Text(
-                      errorMessage.toString().tr(),
+                      errorMessage,
                       style: const TextStyle(color: Colors.red),
                     ),
                   ),
@@ -108,8 +143,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   rewritepasswordController.text &&
                               rewritepasswordController.text.length >= 8) {
                             try {
-                              Auth().updatePassword(
-                                  rewritepasswordController.text);
+                              Auth()
+                                  .updatePassword(
+                                      rewritepasswordController.text)
+                                  .onError((error, stackTrace) {
+                                setState(() {
+                                  errorMessage = error.toString();
+                                });
+                              });
                               Navigator.pop(context);
 
                               final snackBar = SnackBar(
@@ -129,11 +170,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                               // print('Failed with error code: ${e.code}');
                               // print(e.message);
                             }
-                          } else {
-                            setState(() {
-                              errorMessage =
-                                  'You did not fill all the inputs or the password is less than 8 characters';
-                            });
                           }
                         },
                       )),

@@ -20,8 +20,6 @@ void main() async {
   await Firebase.initializeApp();
 
   // cloud messaging
-  // FirebaseMessaging.onBackgroundMessage(messageHandler);
-  // firebaseMessagingListener();
   foreground();
   background();
 

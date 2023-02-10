@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 // import 'package:dio/dio.dart';
 
 // Future<void> messageHandler(RemoteMessage message) async {
@@ -78,22 +81,22 @@ import 'package:flutter/material.dart';
 ///
 ///
 
-// Future<String> getToken() async {
-//   final fcmToken = await FirebaseMessaging.instance.getToken().then((value) {
-//     debugPrint(value.toString());
-//   });
-//   // return fcmToken;
-//   FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
-//     // ignore: todo
-//     // TODO: If necessary send token to application server.
+Future<String> getToken() async {
+  final fcmToken = await FirebaseMessaging.instance.getToken().then((value) {
+    debugPrint(value.toString());
+  });
+  // return fcmToken;
+  FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+    // ignore: todo
+    // TODO: If necessary send token to application server.
 
-//     // Note: This callback is fired at each app startup and whenever a new
-//     // token is generated.
-//   }).onError((err) {
-//     // Error getting token.
-//   });
-//   return fcmToken;
-// }
+    // Note: This callback is fired at each app startup and whenever a new
+    // token is generated.
+  }).onError((err) {
+    // Error getting token.
+  });
+  return fcmToken;
+}
 
 requestPermission() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -130,7 +133,37 @@ background() {
     // If you're going to use other Firebase services in the background, such as Firestore,
     // make sure you call `initializeApp` before using other Firebase services.
     await Firebase.initializeApp();
+    await FirebaseMessaging.instance.subscribeToTopic('checkUp');
+    await FirebaseMessaging.instance.subscribeToTopic('topic');
 
     debugPrint("Handling a background message: ${message.messageId}");
   }
 }
+
+// Future<bool> sendFcmMessage(String title, String message) async {
+//   try {
+//     var url = 'https://fcm.googleapis.com/fcm/send';
+//     var header = {
+//       "Content-Type": "application/json",
+//       "Authorization": "key=your_server_key",
+//     };
+//     var request = {
+//       "notification": {
+//         "title": title,
+//         "text": message,
+//         "sound": "default",
+//         "color": "#990000",
+//       },
+//       "priority": "high",
+//       "to": "/topics/all",
+//     };
+
+//     var client = Client();
+//     var response = await client.post(url as Uri,
+//         headers: header, body: json.encode(request));
+//     return true;
+//   } catch (e, s) {
+//     print(e);
+//     return false;
+//   }
+// }
