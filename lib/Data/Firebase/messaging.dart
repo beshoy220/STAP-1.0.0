@@ -2,6 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+import 'authentication.dart';
+import 'real_time_db.dart';
+
 /// FCM Documentaion code test
 ///
 ///
@@ -20,7 +23,7 @@ import 'package:flutter/material.dart';
 // TOKEN
 Future<String> getToken() async {
   final fcmToken = await FirebaseMessaging.instance.getToken().then((value) {
-    debugPrint(value.toString());
+    return value.toString();
   });
   // return fcmToken;
   FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
@@ -70,9 +73,8 @@ background() {
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
     await Firebase.initializeApp();
+    await FirebaseMessaging.instance.getInitialMessage();
     await FirebaseMessaging.instance.subscribeToTopic('checkUp');
-    // await FirebaseMessaging.instance.subscribeToTopic('topic');
-    // FirebaseMessaging.instance.sendMessage(to: , data: );
     debugPrint("Handling a background message: ${message.messageId}");
   }
 }
@@ -94,7 +96,6 @@ background() {
 //       "priority": "high",
 //       "to": "/topics/all",
 //     };
-
 //     var client = Client();
 //     var response = await client.post(url as Uri,
 //         headers: header, body: json.encode(request));
@@ -106,7 +107,6 @@ background() {
 // }
 
 // TERMINATED MESSAGE
-
 terminated() {
   Future<void> setupInteractedMessage() async {
     // Get any messages which caused the application to open from

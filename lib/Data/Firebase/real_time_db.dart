@@ -1,5 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
+import 'package:school_manager/Data/Firebase/messaging.dart';
 
 class Database {
   final ref = FirebaseDatabase.instance.ref();
@@ -668,7 +670,11 @@ class Database {
     });
   }
 
-  saveToken(email, token) {
-    ref.child('parent_acc/$email').set({'token': token});
+  saveTokenParent(String email) async {
+    String token = await getToken().then((value) {
+      return value.toString();
+    });
+    // print(email);
+    ref.child('parent_feed/$email').update({'token': token});
   }
 }

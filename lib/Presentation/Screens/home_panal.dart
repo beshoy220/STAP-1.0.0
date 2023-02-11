@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_manager/App/meta.dart';
@@ -16,6 +17,8 @@ import 'package:school_manager/Presentation/Parent_Widget/community.dart';
 import 'package:school_manager/Presentation/Parent_Widget/schedule.dart';
 import 'package:school_manager/Services/is_first_time_parent/isFirstTime.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+
+import '../../Data/Firebase/real_time_db.dart';
 
 class ParentPanel extends StatefulWidget {
   const ParentPanel({Key? key}) : super(key: key);
@@ -35,6 +38,8 @@ class _ParentPanelState extends State<ParentPanel> {
   @override
   void initState() {
     createTutorial();
+    Database().saveTokenParent(Auth().currentUser!.email!.split('@').first);
+
     getIsFirstTimeToTrue().then((value) {
       if (value) {
         Future.delayed(Duration.zero, showTutorial);
@@ -61,9 +66,6 @@ class _ParentPanelState extends State<ParentPanel> {
                     onSelected: (value) {
                       switch (value) {
                         case 1:
-                          getToken().then((value) {
-                            print(value);
-                          });
                           ThemeModel().refresh;
                           if (context.locale == const Locale('en', 'US')) {
                             // ignore: deprecated_member_use
