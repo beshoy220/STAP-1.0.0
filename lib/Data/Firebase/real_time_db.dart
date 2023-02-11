@@ -496,7 +496,7 @@ class Database {
         'body': body,
         'status': status,
         'date':
-            '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}'
+            '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}'
       });
     } else if (from.toString().split('-').first == 'tc') {
       ref.child('teacher_feed/$from').once().then((value) {
@@ -515,7 +515,7 @@ class Database {
             'body': body,
             'status': status,
             'date':
-                '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}'
+                '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}'
           });
         });
       });
@@ -572,7 +572,7 @@ class Database {
       'body': body,
       'status': status,
       'date':
-          '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}'
+          '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}'
     });
   }
 
@@ -666,5 +666,9 @@ class Database {
         ref.child('parent_feed/$email/presence/$today').set(list3);
       }
     });
+  }
+
+  saveToken(email, token) {
+    ref.child('parent_acc/$email').set({'token': token});
   }
 }

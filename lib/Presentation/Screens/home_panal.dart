@@ -288,7 +288,7 @@ class _ParentPanelState extends State<ParentPanel> {
                     ),
                   ),
                   const Text(
-                    "هنا سوف ترى كل ما يخص الجداول حيث ان الجدول هو المكان الذي يمكنك فيه رؤية الجدول الزمني لطفلك وسيتم إعلامك إذا غيرته المدرسة",
+                    "هنا سوف تجد كل ما يخص الجداول حيث ان الجدول هو المكان الذي يمكنك فيه رؤية جدول الحصص لطفلك وسيتم إعلامك إذا غيرته المدرسة",
                     style: TextStyle(
                         color: Colors.white,
                         // fontWeight: FontWeight.bold,
@@ -334,7 +334,7 @@ class _ParentPanelState extends State<ParentPanel> {
                     ),
                   ),
                   const Text(
-                    "Here you can track all presences and absences of your child from the first day to the last one in the semester",
+                    "Here you can track all presences and absences of your child session by session from the first day to the last one in the semester",
                     style: TextStyle(
                         color: Colors.white,
                         // fontWeight: FontWeight.bold,
@@ -354,7 +354,7 @@ class _ParentPanelState extends State<ParentPanel> {
                     ),
                   ),
                   const Text(
-                    "هنا يمكنك تتبع جميع حالات التواجد والغياب لطفلك من اليوم الأول إلى اليوم الأخير في الفصل الدراسي",
+                    "هنا يمكنك تتبع جميع حالات التواجد والغياب لطفلك حصه بحصه من اليوم الأول إلى اليوم الأخير في الفصل الدراسي",
                     style: TextStyle(
                         color: Colors.white,
                         // fontWeight: FontWeight.bold,
@@ -420,7 +420,7 @@ class _ParentPanelState extends State<ParentPanel> {
                     ),
                   ),
                   const Text(
-                    "ستتلقى هنا أصواتًا ونوعين من الرسائل: رسالة خاصة تتلقاها فقط و رسالة عامة يتلقاها كل الفصل أو المدرسة",
+                    "ستتلقى هنا أصواتًا ونوعين من الرسائل: رسالة خاصة تتلقاها انت فقط و رسالة عامة يتلقاها كل الفصل أو المدرسة",
                     style: TextStyle(
                         color: Colors.white,
                         // fontWeight: FontWeight.bold,
@@ -466,7 +466,7 @@ class _ParentPanelState extends State<ParentPanel> {
                     ),
                   ),
                   const Text(
-                    "All Marks of all subjects will be here and Evaluation",
+                    "All Marks of all subjects will be listed here as: final, mid-term or just a quiz",
                     style: TextStyle(
                         color: Colors.white,
                         // fontWeight: FontWeight.bold,
@@ -486,7 +486,7 @@ class _ParentPanelState extends State<ParentPanel> {
                     ),
                   ),
                   const Text(
-                    "جميع علامات جميع المواد ستكون هنا و التقييم",
+                    "جميع علامات المواد ستكون هنا مثل: الفاينال و الميد تيرم و الامنحنات الصغيره",
                     style: TextStyle(
                         color: Colors.white,
                         // fontWeight: FontWeight.bold,
@@ -533,7 +533,7 @@ class _ParentPanelState extends State<ParentPanel> {
                     ),
                   ),
                   const Text(
-                    "Here you can get more features like changing language ,switching account, report an error and dark mode! ",
+                    "Here you can get more features like changing language, report an error, dark mode, change password and switching account ! ",
                     style: TextStyle(
                         color: Colors.white,
                         // fontWeight: FontWeight.bold,
@@ -553,7 +553,7 @@ class _ParentPanelState extends State<ParentPanel> {
                     ),
                   ),
                   const Text(
-                    "هنا يمكنك الحصول على المزيد من الميزات مثل تغيير اللغة وتبديل الحساب والإبلاغ عن خطأ والوضع المظلم!",
+                    "هنا يمكنك الحصول على المزيد من الميزات مثل تغيير اللغة والإبلاغ عن مشكله والوضع الليلى و تغير كلمه السر و تغير الحساب",
                     style: TextStyle(
                         color: Colors.white,
                         // fontWeight: FontWeight.bold,
