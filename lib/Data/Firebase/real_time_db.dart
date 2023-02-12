@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
 import 'package:school_manager/Data/Firebase/messaging.dart';
 
@@ -322,6 +321,14 @@ class Database {
           'option3': {'option': option3, 'voters': [], 'num_of_voters': 0},
           'option4': {'option': option4, 'voters': [], 'num_of_voters': 0}
         });
+        ref.child('parent_feed/$key/token').get().then((value) {
+          sendFcmMessage(
+              value.value.toString(),
+              'New Vote',
+              '$voteTopic \n 1: $option1 \n 2: $option2 \n 3: $option3 \n 4: $option4',
+              'ADMIN',
+              '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}');
+        });
       });
     });
     ref.child('parent_acc/$grade/$classs/vote').push().set({
@@ -492,6 +499,12 @@ class Database {
   sendPrivateMessageToParent(String grade, String classs, String id,
       String from, String title, String body, String status) {
     if (from.toString().split('-').first == 'admin') {
+      Future.delayed(const Duration(seconds: 1), () {
+        ref.child('parent_feed/$id/token').get().then((value) {
+          sendFcmMessage(value.value.toString(), title, body, 'ADMIN',
+              '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}');
+        });
+      });
       ref.child('parent_feed/$id/community/private_message').push().set({
         'from': 'ADMIN',
         'title': title,
@@ -508,6 +521,12 @@ class Database {
             .once()
             .then((value) {
           Map map = value.snapshot.value as Map;
+          Future.delayed(const Duration(seconds: 1), () {
+            ref.child('parent_feed/$id/token').get().then((value) {
+              sendFcmMessage(value.value.toString(), title, body, map['name'],
+                  '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}');
+            });
+          });
           return ref
               .child('parent_feed/$id/community/private_message')
               .push()
@@ -527,6 +546,12 @@ class Database {
   sendPuplicMessageToParent(String grade, String classs, String id, String from,
       String title, String body, String status) {
     if (from.toString().split('-').first == 'admin') {
+      Future.delayed(const Duration(seconds: 1), () {
+        ref.child('parent_feed/$id/token').get().then((value) {
+          sendFcmMessage(value.value.toString(), title, body, 'ADMIN',
+              '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}');
+        });
+      });
       ref.child('parent_feed/$id/community/public_message').push().set({
         'from': "ADMIN",
         'title': title,
@@ -538,6 +563,12 @@ class Database {
     } else if (from.toString().split('-').first == 'tc') {
       ref.child('teacher_feed/$from').once().then((value) {
         Map map = value.snapshot.value as Map;
+        Future.delayed(const Duration(seconds: 1), () {
+          ref.child('parent_feed/$id/token').get().then((value) {
+            sendFcmMessage(value.value.toString(), title, body, map['name'],
+                '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}');
+          });
+        });
         ref
             .child('teacher_acc/${map['subject']}/users/$from')
             .once()
@@ -561,6 +592,12 @@ class Database {
 
   sendTeacherMessage(String subject, String id, String from, String title,
       String body, String status) {
+    Future.delayed(const Duration(seconds: 1), () {
+      ref.child('teacher_feed/$id/token').get().then((value) {
+        sendFcmMessage(value.value.toString(), title, body, 'ADMIN',
+            '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}');
+      });
+    });
     return ref
         .child('teacher_acc')
         .child(subject)
@@ -634,6 +671,14 @@ class Database {
     ref.child('/parent_feed/$email/sessions').update({
       'quit_request': {'reason': reason, 'accepted': false}
     });
+    ref.child('parent_feed/$email/token').get().then((value) {
+      sendFcmMessage(
+          value.value.toString(),
+          'Quit schedule',
+          'It seems that your child needs to quit schedule and the reason is : $reason',
+          'Teacher of current session',
+          '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}');
+    });
   }
 
   getQuitRequest(String email) {
@@ -676,5 +721,13 @@ class Database {
     });
     // print(email);
     ref.child('parent_feed/$email').update({'token': token});
+  }
+
+  saveTokenTeacher(String email) async {
+    String token = await getToken().then((value) {
+      return value.toString();
+    });
+    // print(email);
+    ref.child('teacher_feed/$email').update({'token': token});
   }
 }

@@ -446,7 +446,7 @@ class _AddTeacherState extends State<AddTeacher> {
                                     if (!forms[index]['isMale']) {
                                       setState(() {
                                         forms[index]['isFemale'] = value;
-                                        forms[index]['gender'] = 'male';
+                                        forms[index]['gender'] = 'female';
                                       });
                                     }
                                   },
@@ -971,46 +971,279 @@ class _TeacherStatusState extends State<TeacherStatus> {
               icon: const Icon(Icons.output))
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  '${'Registed Men'.tr()} : $males',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                const Icon(
-                  Icons.boy,
-                  color: Colors.blue,
-                )
-              ],
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    '${'Registed Men'.tr()} : $males',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const Icon(
+                    Icons.boy,
+                    color: Colors.blue,
+                  )
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  '${'Registed Women'.tr()} : $females',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                const Icon(Icons.girl, color: Colors.pink)
-              ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    '${'Registed Women'.tr()} : $females',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const Icon(Icons.girl, color: Colors.pink)
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          // Text('Who is absent today :'),
-          // Padding(
-          //   padding: EdgeInsets.all(18.0),
-          //   child: _createTable(),
-          // ),
-        ],
+            const SizedBox(
+              height: 50,
+            ),
+            SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Center(
+                              child: Text(
+                            'Registed teacher'.tr(),
+                            style: const TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                        SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width /
+                                      2.2 *
+                                      4,
+                                  child: FirebaseAnimatedList(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      query: Database().getUsersTeacher(),
+                                      itemBuilder: (BuildContext context,
+                                          DataSnapshot snapshot,
+                                          Animation<double> animation,
+                                          int index) {
+                                        String subject = snapshot.key as String;
+
+                                        if (snapshot.exists) {
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                color: const Color.fromARGB(
+                                                    171, 0, 56, 185),
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              18.0),
+                                                      child: Text(
+                                                        subject
+                                                            .toString()
+                                                            .capitalize()
+                                                            .tr(),
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .displaySmall,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.3,
+                                                            child: Text(
+                                                              'Teacher'.tr(),
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .titleLarge,
+                                                            )),
+                                                        SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.3,
+                                                            child: Text(
+                                                                'Stage'.tr(),
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleLarge)),
+                                                        SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.3,
+                                                            child: Text(
+                                                                'Teacher ID'
+                                                                    .tr(),
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleLarge)),
+                                                        SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.3,
+                                                            child: Text(
+                                                                'National id'
+                                                                    .tr(),
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleLarge))
+                                                      ],
+                                                    ),
+                                                    const Divider(),
+                                                  ],
+                                                ),
+                                              ),
+                                              const Divider(),
+                                              FirebaseAnimatedList(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  query: Database()
+                                                      .getTeachersBySubject(
+                                                          subject.toString()),
+                                                  itemBuilder: (context,
+                                                      snapshot,
+                                                      animation,
+                                                      index) {
+                                                    Map mappingValues =
+                                                        snapshot.value as Map;
+                                                    String id =
+                                                        snapshot.key as String;
+
+                                                    return Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Row(
+                                                        children: [
+                                                          SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width /
+                                                                  2.3,
+                                                              child: Text(
+                                                                mappingValues[
+                                                                        'name']
+                                                                    .toString(),
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleMedium,
+                                                              )),
+                                                          SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.3,
+                                                            child: ListView
+                                                                .builder(
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    itemCount:
+                                                                        3,
+                                                                    physics:
+                                                                        const NeverScrollableScrollPhysics(),
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                                index) =>
+                                                                            Text(
+                                                                              ((mappingValues['stages'] as List)[index] == 'None') ? '' : (mappingValues['stages'] as List)[index].toString().tr(),
+                                                                              style: Theme.of(context).textTheme.titleMedium,
+                                                                            )),
+                                                          ),
+                                                          SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width /
+                                                                  2.3,
+                                                              child: Text(
+                                                                mappingValues[
+                                                                    'email(id)'],
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleMedium,
+                                                              )),
+                                                          SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width /
+                                                                  2.3,
+                                                              child: Text(
+                                                                mappingValues[
+                                                                    'national_id'],
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleMedium,
+                                                              )),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }),
+                                            ],
+                                          );
+                                        } else {
+                                          return const Text('No data');
+                                        }
+                                      }),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ])
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

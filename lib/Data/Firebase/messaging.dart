@@ -1,9 +1,8 @@
+import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
-import 'authentication.dart';
-import 'real_time_db.dart';
+import 'package:http/http.dart';
 
 /// FCM Documentaion code test
 ///
@@ -55,10 +54,23 @@ requestPermission() async {
   debugPrint('User granted permission: ${settings.authorizationStatus}');
 }
 
-// FOREGROUND MESSAGE (NEED TO HANDLE IN locl_notification PACKAGE)
+// FOREGROUND MESSAGE (NEED TO HANDLE IN flutter_local_notification PACKAGE)
 foreground() {
+  // var androidInitialize =
+  //     const AndroidInitializationSettings('@mipmap/ic_launcher');
+  // var iOSInitialize = const IOSInitializationSettings();
+  // var initializationsSettings =
+  //     InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+  // FlutterLocalNotificationsPlugin.initialize(initializationsSettings,
+  //     onSelectNotification: (String? payload) async {
+  //   try {
+  //     if (payload != null && payload.isNotEmpty) {
+  //     } else {}
+  //   } catch (e) {}
+  //   return;
+  // });
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    debugPrint('Got a message whilst in the foreground!');
+    debugPrint('Got a message whilst in the foreground');
     debugPrint('Message data: ${message.data}');
 
     if (message.notification != null) {
@@ -79,32 +91,34 @@ background() {
   }
 }
 
-// Future<bool> sendFcmMessage(String title, String message) async {
-//   try {
-//     var url = 'https://fcm.googleapis.com/fcm/send';
-//     var header = {
-//       "Content-Type": "application/json",
-//       "Authorization": "key=your_server_key",
-//     };
-//     var request = {
-//       "notification": {
-//         "title": title,
-//         "text": message,
-//         "sound": "default",
-//         "color": "#990000",
-//       },
-//       "priority": "high",
-//       "to": "/topics/all",
-//     };
-//     var client = Client();
-//     var response = await client.post(url as Uri,
-//         headers: header, body: json.encode(request));
-//     return true;
-//   } catch (e, s) {
-//     print(e);
-//     return false;
-//   }
-// }
+sendFcmMessage(
+    String to, String title, String message, String from, String time) async {
+  try {
+    var url = 'https://fcm.googleapis.com/fcm/send';
+    var header = {
+      "Content-Type": "application/json",
+      "Authorization":
+          "key=AAAAjnX0RmU:APA91bHMuUFlRcu2mmMbxy8H-VZj6yNO_4SYvrea_yHqy8f6sOIv0WgVtRqkJwJOYtjToo6OciN80hpuoqJ4ytxsAHVmzfSwzZClFfABi_vJrmomzNISB1_LS_lw01wxlSw6eL3lWwT7",
+    };
+    var request = {
+      "notification": {
+        "title": title,
+        "body": "$message\n\n from : $from  \n time: $time",
+        "sound": "default",
+        "color": "#990000",
+      },
+      "priority": "high",
+      "to": to,
+    };
+    var client = Client();
+    var response = await client.post(Uri.parse(url),
+        headers: header, body: json.encode(request));
+    return true;
+  } catch (e, s) {
+    print(e.toString() + ' / ' + s.toString());
+    return false;
+  }
+}
 
 // TERMINATED MESSAGE
 terminated() {

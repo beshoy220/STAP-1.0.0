@@ -1,11 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:school_manager/App/meta.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
 import 'package:school_manager/Data/Local_providers/options_operations.dart';
-import 'package:school_manager/Presentation/Screens/home_panal.dart';
 import 'package:school_manager/Presentation/Screens/report_error.dart';
 
 class ChangePassword extends StatefulWidget {

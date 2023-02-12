@@ -37,6 +37,7 @@ class _TeacherPanalState extends State<TeacherPanal> {
       setState(() {
         scaleee = 0;
       });
+      Database().saveTokenTeacher(email);
       Database()
           .ref
           .child('/teacher_acc/$subject/users/$email')
