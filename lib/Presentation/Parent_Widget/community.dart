@@ -145,6 +145,7 @@ class _VotesState extends State<Votes> {
   @override
   Widget build(BuildContext context) {
     return FirebaseAnimatedList(
+      reverse: true,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       defaultChild: Center(
@@ -451,6 +452,7 @@ class _PrivateMessageState extends State<PrivateMessage> {
             ),
           ),
           FirebaseAnimatedList(
+            reverse: true,
             defaultChild: Center(
               child: Column(
                 children: [
@@ -586,6 +588,7 @@ class _PublicMessageState extends State<PublicMessage> {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: FirebaseAnimatedList(
+        reverse: true,
         defaultChild: Center(
           child: Column(
             children: [

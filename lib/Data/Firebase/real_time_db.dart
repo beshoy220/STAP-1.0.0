@@ -651,12 +651,12 @@ class Database {
       String mark, String comment, String testType, String examMark) {
     ref.child('teacher_feed/$email/subject').once().then((value) {
       String subject = value.snapshot.value as String;
-      ref.child('parent_feed/$email/token').get().then((value) {
+      ref.child('parent_feed/$parentEmail/token').get().then((value) {
         sendFcmMessage(
             value.value.toString(),
             'Evaluation',
             'It seems that your child got an exam click here to view the marks of subject $subject',
-            'Teacher',
+            'Teacher of $subject',
             '${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}  ${(DateTime.now().hour > 12) ? DateTime.now().hour - 12 : DateTime.now().hour}:${DateTime.now().minute} ${(DateTime.now().hour > 12) ? 'PM' : 'AM'}');
       });
       ref.child('parent_feed/$parentEmail/evaluation').update({

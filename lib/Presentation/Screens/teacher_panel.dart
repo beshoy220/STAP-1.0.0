@@ -102,6 +102,7 @@ class _TeacherPanalState extends State<TeacherPanal> {
                                                 ),
                                               )),
                                               FirebaseAnimatedList(
+                                                reverse: true,
                                                 shrinkWrap: true,
                                                 physics:
                                                     const NeverScrollableScrollPhysics(),
