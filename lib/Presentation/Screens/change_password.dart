@@ -5,6 +5,7 @@ import 'package:school_manager/App/meta.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
 import 'package:school_manager/Data/Local_providers/options_operations.dart';
 import 'package:school_manager/Presentation/Screens/report_error.dart';
+import 'package:school_manager/Services/Account_manager/account_manager.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -82,7 +83,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             _togglevisibility();
                           },
                           child: Icon(
-                            _showPassword
+                            !_showPassword
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                             color: AppMeta.color,
@@ -104,7 +105,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             _togglevisibility2();
                           },
                           child: Icon(
-                            _showPassword2
+                            !_showPassword2
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                             color: AppMeta.color,
@@ -140,15 +141,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                           if (writepasswordController.text ==
                                   rewritepasswordController.text &&
                               rewritepasswordController.text.length >= 8) {
-                            try {
-                              Auth()
-                                  .updatePassword(
-                                      rewritepasswordController.text)
-                                  .onError((error, stackTrace) {
-                                setState(() {
-                                  errorMessage = error.toString();
-                                });
-                              });
+                            Auth()
+                                .updatePassword(rewritepasswordController.text)
+                                .then((value) {
+                              Accounts().saveUserPasswordAndId(
+                                  Auth().currentUser!.email as String,
+                                  rewritepasswordController.text);
                               Navigator.pop(context);
 
                               final snackBar = SnackBar(
@@ -161,13 +159,11 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
-                            } on FirebaseAuthException catch (e) {
+                            }).onError((error, stackTrace) {
                               setState(() {
-                                errorMessage = e.message.toString();
+                                errorMessage = error.toString();
                               });
-                              // print('Failed with error code: ${e.code}');
-                              // print(e.message);
-                            }
+                            });
                           }
                         },
                       )),

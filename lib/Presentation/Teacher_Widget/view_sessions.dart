@@ -92,6 +92,9 @@ class _TeacherSessionsState extends State<TeacherSessions> {
               return const Center();
             }
           },
+        ),
+        const SizedBox(
+          height: 30,
         )
       ],
     );

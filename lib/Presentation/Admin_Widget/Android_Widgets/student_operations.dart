@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:school_manager/App/meta.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
@@ -741,12 +743,105 @@ class DeleteStudent extends StatefulWidget {
 }
 
 class _DeleteStudentState extends State<DeleteStudent> {
-  bool selectAll = false;
   List<bool> checkBoxs = [];
 
   final TextEditingController _controllerForSearch = TextEditingController();
 
   List listOfDelete = [];
+  final LocalAuthentication auth = LocalAuthentication();
+  _SupportState _supportState = _SupportState.unknown;
+  bool? _canCheckBiometrics;
+  List<BiometricType>? _availableBiometrics;
+  String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
+
+  String errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    auth.isDeviceSupported().then(
+          (bool isSupported) => setState(() => _supportState = isSupported
+              ? _SupportState.supported
+              : _SupportState.unsupported),
+        );
+  }
+
+  Future<void> _checkBiometrics() async {
+    late bool canCheckBiometrics;
+    try {
+      canCheckBiometrics = await auth.canCheckBiometrics;
+    } on PlatformException catch (e) {
+      canCheckBiometrics = false;
+      print(e);
+    }
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _canCheckBiometrics = canCheckBiometrics;
+    });
+  }
+
+  Future<void> _getAvailableBiometrics() async {
+    late List<BiometricType> availableBiometrics;
+    try {
+      availableBiometrics = await auth.getAvailableBiometrics();
+    } on PlatformException catch (e) {
+      availableBiometrics = <BiometricType>[];
+      print(e);
+    }
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _availableBiometrics = availableBiometrics;
+    });
+  }
+
+  Future<void> _authenticateWithBiometrics() async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+        _authorized = 'Authenticating';
+      });
+      authenticated = await auth.authenticate(
+        localizedReason:
+            'Scan your fingerprint (or face or whatever) to authenticate',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = 'Authenticating';
+      });
+    } on PlatformException catch (e) {
+      print(e);
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = 'Error - ${e.message}';
+      });
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+
+    final String message = authenticated ? 'Authorized' : 'Not Authorized';
+    setState(() {
+      _authorized = message;
+    });
+  }
+
+  Future<void> _cancelAuthentication() async {
+    await auth.stopAuthentication();
+    setState(() => _isAuthenticating = false);
+  }
 
   showAlertDialog(
       BuildContext context, String id, String emailId, String gender) {
@@ -862,16 +957,16 @@ class _DeleteStudentState extends State<DeleteStudent> {
                             child: Row(
                               children: [
                                 Text(
-                                  'select all'.tr(),
+                                  '-'.tr(),
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
-                                Checkbox(
-                                    value: selectAll,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectAll = value!;
-                                      });
-                                    })
+                                // Checkbox(
+                                //     value: selectAll,
+                                //     onChanged: (value) {
+                                //       setState(() {
+                                //         selectAll = value!;
+                                //       });
+                                //     })
                               ],
                             ),
                           )
@@ -947,32 +1042,84 @@ class _DeleteStudentState extends State<DeleteStudent> {
                                                     .size
                                                     .width /
                                                 2.3,
-                                            child: selectAll
-                                                ? Checkbox(
-                                                    value: checkBoxs[index],
-                                                    onChanged: (value) {
+                                            child: OutlinedButton(
+                                                onPressed: () async {
+                                                  if (_supportState ==
+                                                      _SupportState
+                                                          .unsupported) {
+                                                    showAlertDialog(
+                                                        context,
+                                                        mappingKeysId,
+                                                        mappingValues[
+                                                                'email(id)']
+                                                            .toString()
+                                                            .split('@')
+                                                            .first,
+                                                        mappingValues[
+                                                            'gender']);
+                                                  } else {
+                                                    bool authenticated = false;
+                                                    try {
                                                       setState(() {
-                                                        checkBoxs[index] =
-                                                            value!;
-
-                                                        if (checkBoxs[index] ==
-                                                            false) {
-                                                          listOfDelete
-                                                              .removeAt(index);
-                                                          listOfDelete.insert(
-                                                              index, 'null');
-                                                        } else {
-                                                          listOfDelete
-                                                              .removeAt(index);
-                                                          listOfDelete.insert(
-                                                              index,
-                                                              snapshot.key
-                                                                  .toString());
-                                                        }
+                                                        _isAuthenticating =
+                                                            true;
+                                                        _authorized =
+                                                            'Authenticating';
                                                       });
-                                                    })
-                                                : OutlinedButton(
-                                                    onPressed: () {
+                                                      authenticated = await auth
+                                                          .authenticate(
+                                                        localizedReason:
+                                                            'Let OS determine authentication method',
+                                                        options:
+                                                            const AuthenticationOptions(
+                                                          stickyAuth: true,
+                                                        ),
+                                                      );
+                                                      setState(() {
+                                                        _isAuthenticating =
+                                                            false;
+                                                      });
+                                                    } on PlatformException catch (e) {
+                                                      print(e);
+                                                      setState(() {
+                                                        _isAuthenticating =
+                                                            false;
+                                                        _authorized =
+                                                            'Error - ${e.message}';
+                                                      });
+                                                      return;
+                                                    }
+
+                                                    if (!mounted) {
+                                                      return;
+                                                    }
+
+                                                    setState(() => _authorized =
+                                                        authenticated
+                                                            ? 'Authorized'
+                                                            : 'Not Authorized');
+
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    /// DELETE USER AFTER LOCAL AUTH
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    ///
+                                                    if (authenticated) {
                                                       showAlertDialog(
                                                           context,
                                                           mappingKeysId,
@@ -983,16 +1130,17 @@ class _DeleteStudentState extends State<DeleteStudent> {
                                                               .first,
                                                           mappingValues[
                                                               'gender']);
-                                                    },
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text('Delete'.tr()),
-                                                        const Icon(Icons.delete)
-                                                      ],
-                                                    ))),
+                                                    }
+                                                  }
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text('Delete'.tr()),
+                                                    const Icon(Icons.delete)
+                                                  ],
+                                                ))),
                                       ],
                                     ),
                                     const Divider()
@@ -1046,34 +1194,29 @@ class _DeleteStudentState extends State<DeleteStudent> {
                                                           .size
                                                           .width /
                                                       2.3,
-                                                  child: selectAll
-                                                      ? Checkbox(
-                                                          value: false,
-                                                          onChanged: (value) {})
-                                                      : OutlinedButton(
-                                                          onPressed: () {
-                                                            showAlertDialog(
-                                                                context,
-                                                                mappingKeysId,
-                                                                mappingValues[
-                                                                        'email(id)']
-                                                                    .toString()
-                                                                    .split('@')
-                                                                    .first,
-                                                                mappingValues[
-                                                                    'gender']);
-                                                          },
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text('Delete'
-                                                                  .tr()),
-                                                              const Icon(
-                                                                  Icons.delete)
-                                                            ],
-                                                          ))),
+                                                  child: OutlinedButton(
+                                                      onPressed: () {
+                                                        showAlertDialog(
+                                                            context,
+                                                            mappingKeysId,
+                                                            mappingValues[
+                                                                    'email(id)']
+                                                                .toString()
+                                                                .split('@')
+                                                                .first,
+                                                            mappingValues[
+                                                                'gender']);
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text('Delete'.tr()),
+                                                          const Icon(
+                                                              Icons.delete)
+                                                        ],
+                                                      ))),
                                             ],
                                           ),
                                           const Divider()
@@ -1093,53 +1236,48 @@ class _DeleteStudentState extends State<DeleteStudent> {
                     width: MediaQuery.of(context).size.width,
                     child: OutlinedButton(
                         onPressed: () {
-                          selectAll
-                              ? showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text("Delete From DataBase"),
-                                      content: const Text(
-                                          "You are tring to delete some people from database , Are you sure that you want to delete them?"),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('cancel')),
-                                        TextButton(
-                                          child: const Text(
-                                            "Delete",
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            for (var i = 0;
-                                                i < listOfDelete.length;
-                                                i++) {
-                                              if (listOfDelete[i] != 'null') {
-                                                Database().deleteParentUserById(
-                                                    widget.grade,
-                                                    widget.classs,
-                                                    listOfDelete[i]['id'],
-                                                    listOfDelete[i]['gender'],
-                                                    listOfDelete[i]
-                                                        ['email(id)']);
-                                              }
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                    ;
-                                  },
-                                )
-                              : debugPrint('object');
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (context) {
+                          //     return AlertDialog(
+                          //       title: const Text("Delete From DataBase"),
+                          //       content: const Text(
+                          //           "You are tring to delete some people from database , Are you sure that you want to delete them?"),
+                          //       actions: [
+                          //         TextButton(
+                          //             onPressed: () {
+                          //               Navigator.pop(context);
+                          //             },
+                          //             child: const Text('cancel')),
+                          //         TextButton(
+                          //           child: const Text(
+                          //             "Delete",
+                          //             style: TextStyle(color: Colors.red),
+                          //           ),
+                          //           onPressed: () {
+                          //             Navigator.of(context).pop();
+                          //             for (var i = 0;
+                          //                 i < listOfDelete.length;
+                          //                 i++) {
+                          //               if (listOfDelete[i] != 'null') {
+                          //                 Database().deleteParentUserById(
+                          //                     widget.grade,
+                          //                     widget.classs,
+                          //                     listOfDelete[i]['id'],
+                          //                     listOfDelete[i]['gender'],
+                          //                     listOfDelete[i]['email(id)']);
+                          //               }
+                          //             }
+                          //           },
+                          //         ),
+                          //       ],
+                          //     );
+                          //   },
+                          // );
+
                           Navigator.pop(context);
                         },
-                        child: selectAll
-                            ? Text('Delete Selected Students'.tr())
-                            : Text('Done'.tr())),
+                        child: Text('Done'.tr())),
                   ),
                 ),
                 const SizedBox(
@@ -1909,4 +2047,10 @@ class _StudentStatusState extends State<StudentStatus> {
       ),
     );
   }
+}
+
+enum _SupportState {
+  unknown,
+  supported,
+  unsupported,
 }

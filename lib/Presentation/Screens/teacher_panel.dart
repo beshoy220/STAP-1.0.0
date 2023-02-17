@@ -7,6 +7,7 @@ import 'package:school_manager/Data/Firebase/authentication.dart';
 import 'package:school_manager/Data/Firebase/real_time_db.dart';
 import 'package:school_manager/Data/Local_providers/options_operations.dart';
 import 'package:school_manager/Presentation/Screens/change_password.dart';
+import 'package:school_manager/Services/Account_manager/account_manager.dart';
 import 'package:school_manager/Services/Theme/theme.dart';
 import 'package:school_manager/Presentation/Screens/account_manager.dart';
 import 'package:school_manager/Presentation/Screens/report_error.dart';
@@ -440,6 +441,13 @@ class _TeacherPanalState extends State<TeacherPanal> {
                                               onTap: () {
                                                 NavigateTo(context,
                                                     teacherHomeNav[index][4]);
+                                                // Accounts()
+                                                //     .saveUserPasswordAndId(
+                                                //         Auth()
+                                                //             .currentUser!
+                                                //             .email as String,
+                                                //         '3038083031234');
+                                                // Accounts().deleteAll();
                                               },
                                               child: Stack(children: [
                                                 Container(

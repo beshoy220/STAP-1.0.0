@@ -10,6 +10,7 @@ import 'package:school_manager/Presentation/Screens/admin_panal.dart';
 import 'package:school_manager/Presentation/Screens/home_panal.dart';
 import 'package:school_manager/Presentation/Screens/report_error.dart';
 import 'package:school_manager/Presentation/Screens/teacher_panel.dart';
+import 'package:school_manager/Services/Account_manager/account_manager.dart';
 
 class WelcomeSingInMobile extends StatefulWidget {
   const WelcomeSingInMobile({Key? key}) : super(key: key);
@@ -153,6 +154,8 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  late String emailId =
+      [myControllerForStudentId.text, '@', myControllerForEmail.text].join();
   final LocalAuthentication auth = LocalAuthentication();
   _SupportState _supportState = _SupportState.unknown;
   bool? _canCheckBiometrics;
@@ -267,12 +270,16 @@ class _SignInState extends State<SignIn> {
             context,
             MaterialPageRoute(builder: (context) => const ParentPanel()),
           );
+          Accounts().saveUserPasswordAndId(
+              emailId, myControllerForStudentPassword.text);
           break;
         case 'tc':
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const TeacherPanal()),
           );
+          Accounts().saveUserPasswordAndId(
+              emailId, myControllerForStudentPassword.text);
           break;
         case 'admin':
           Navigator.pushReplacement(
@@ -463,14 +470,6 @@ class _SignInState extends State<SignIn> {
                   height: 40,
                   child: ElevatedButton(
                       onPressed: () {
-                        // sendNotification();
-                        // Auth().signInWithCustomToken(token)
-                        // print(getToken());
-                        String emailId = [
-                          myControllerForStudentId.text,
-                          '@',
-                          myControllerForEmail.text
-                        ].join();
                         Auth()
                             .signInWithEmailAndPassword(
                                 email: emailId,
@@ -486,6 +485,8 @@ class _SignInState extends State<SignIn> {
                                       builder: (context) =>
                                           const ParentPanel()),
                                 );
+                                Accounts().saveUserPasswordAndId(emailId,
+                                    myControllerForStudentPassword.text);
                               } else {
                                 _authenticate('pt');
                               }
@@ -498,6 +499,8 @@ class _SignInState extends State<SignIn> {
                                       builder: (context) =>
                                           const TeacherPanal()),
                                 );
+                                Accounts().saveUserPasswordAndId(emailId,
+                                    myControllerForStudentPassword.text);
                               } else {
                                 _authenticate('tc');
                               }
