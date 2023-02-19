@@ -58,79 +58,119 @@ class AccountMaanger extends StatelessWidget {
                   initialData: {},
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     print(snapshot.data);
-                    Map map = (jsonDecode(snapshot.data['Accounts']) as Map);
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: (snapshot.data as Map).length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: InkWell(
-                              onTap: () {
-                                if (snapshot.hasData) {
-                                  // NavigateTo(context, TeacherPanal());
-                                  // switch (map['$index']['email']
-                                  //     .toString()
-                                  //     .split('-')
-                                  //     .first) {
-                                  //   case 'pt':
-                                  //     Navigator.pushReplacement(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //           builder: (context) =>
-                                  //               const ParentPanel()),
-                                  //     );
-                                  //     Auth().signInWithEmailAndPassword(
-                                  //         email: map['$index']['email'],
-                                  //         password: map['$index']['password']);
-                                  //     break;
-                                  //   case 'tc':
-                                  //     Navigator.pushReplacement(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //           builder: (context) =>
-                                  //               const TeacherPanal()),
-                                  //     );
-                                  //     Auth().signInWithEmailAndPassword(
-                                  //         email: map['$index']['email'],
-                                  //         password: map['$index']['password']);
+                    Map map = snapshot.data as Map;
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              (map['Accounts'].split(' && ') as List).length,
+                          itemBuilder: (BuildContext context, int index) {
+                            List list = map['Accounts'].split(' && ') as List;
+                            String emailId = list[index]
+                                .split(' , ')
+                                .first
+                                .split('@')
+                                .first
+                                .split('[')
+                                .last;
+                            String schoolCode = list[index]
+                                .split(' , ')
+                                .first
+                                .split('@')
+                                .last
+                                .split(',')
+                                .first;
 
-                                  //     break;
-                                  // }
-                                } else {}
-                              },
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Color.fromARGB(37, 255, 255, 255),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: Row(
-                                    children: [
-                                      const Expanded(
-                                        flex: 1,
-                                        child: Icon(
-                                          Icons.account_circle_outlined,
-                                          color: Colors.white,
-                                          size: 50,
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  switch (emailId.toString().split('-').first) {
+                                    case 'pt':
+                                      Auth()
+                                          .signInWithEmailAndPassword(
+                                              email: list[index]
+                                                  .split(',')
+                                                  .first
+                                                  .split('[')
+                                                  .last
+                                                  .trim(),
+                                              password: list[index]
+                                                  .split(',')
+                                                  .last
+                                                  .split(']')
+                                                  .first
+                                                  .trim())
+                                          .then((value) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ParentPanel()),
+                                        );
+                                      });
+                                      break;
+                                    case 'tc':
+                                      Auth()
+                                          .signInWithEmailAndPassword(
+                                              email: list[index]
+                                                  .split(',')
+                                                  .first
+                                                  .split('[')
+                                                  .last
+                                                  .trim(),
+                                              password: list[index]
+                                                  .split(',')
+                                                  .last
+                                                  .split(']')
+                                                  .first
+                                                  .trim())
+                                          .then((value) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const TeacherPanal()),
+                                        );
+                                      });
+                                      break;
+                                  }
+                                },
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Color.fromARGB(37, 255, 255, 255),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: Row(
+                                      children: [
+                                        const Expanded(
+                                          flex: 1,
+                                          child: Icon(
+                                            Icons.account_circle_outlined,
+                                            color: Colors.white,
+                                            size: 50,
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                          flex: 4,
-                                          child: Text(
-                                            'School code :  ${map['$index']['email'].toString().split('@').last} \nAccount ID:  ${map['$index']['email'].toString().split('@').first} \n\nPassword : *********** ',
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ))
-                                    ],
+                                        Expanded(
+                                            flex: 4,
+                                            child: Text(
+                                              'School code :  $emailId \nAccount ID: $schoolCode  \n\nPassword : *********** ',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ))
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        });
+                            );
+                          });
+                    } else {
+                      return Center();
+                    }
                   },
                 ),
                 Padding(
@@ -142,6 +182,9 @@ class AccountMaanger extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => const WelcomeSingInMobile()),
                       );
+                      // Accounts().deleteAll();
+                      // Accounts().saveUserPasswordAndId(
+                      //     'tc-20@school.com', '3038083031234');
                     },
                     child: Container(
                       decoration: const BoxDecoration(

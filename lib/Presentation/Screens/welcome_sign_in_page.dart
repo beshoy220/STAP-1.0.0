@@ -173,6 +173,93 @@ class _SignInState extends State<SignIn> {
               ? _SupportState.supported
               : _SupportState.unsupported),
         );
+    Accounts().readAllSavedUsers().then((value) {
+      if (value == null) {
+        // no code to excute
+      } else {
+        showModalBottomSheet<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return SizedBox(
+              height: 300,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Center(
+                          child: Text(
+                        'Sign in with',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      )),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        myControllerForEmail.text = value
+                            .split(',')
+                            .first
+                            .split('[')
+                            .last
+                            .split('@')
+                            .last
+                            .trim();
+                        myControllerForStudentId.text = value
+                            .split(',')
+                            .first
+                            .split('[')
+                            .last
+                            .split('@')
+                            .first
+                            .trim();
+                        myControllerForStudentPassword.text =
+                            value.split(',').last.split(']').first.trim();
+                        Navigator.pop(context);
+                      },
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                  // color: Color.fromARGB(37, 255, 255, 255),
+                                  ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.account_circle_outlined,
+                                      color: Colors.white,
+                                      size: 50,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'School code :   \nAccount ID:   \nPassword : *********** ',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      }
+    });
   }
 
   Future<void> _checkBiometrics() async {

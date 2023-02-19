@@ -35,10 +35,6 @@ void main() async {
     );
   };
 
-  // Firebase initializer [for Database]
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
-
   // root app
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],

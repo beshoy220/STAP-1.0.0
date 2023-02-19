@@ -17,7 +17,6 @@ import 'package:school_manager/Presentation/Parent_Widget/community.dart';
 import 'package:school_manager/Presentation/Parent_Widget/schedule.dart';
 import 'package:school_manager/Services/is_first_time_parent/isFirstTime.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-
 import '../../Data/Firebase/real_time_db.dart';
 
 class ParentPanel extends StatefulWidget {
