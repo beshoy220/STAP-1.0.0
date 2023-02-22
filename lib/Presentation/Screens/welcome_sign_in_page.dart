@@ -154,8 +154,11 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  late String emailId =
-      [myControllerForStudentId.text, '@', myControllerForEmail.text].join();
+  late String emailId = [
+    myControllerForStudentId.text,
+    '@',
+    myControllerForSchoolCode.text
+  ].join();
   final LocalAuthentication auth = LocalAuthentication();
   _SupportState _supportState = _SupportState.unknown;
   bool? _canCheckBiometrics;
@@ -174,91 +177,85 @@ class _SignInState extends State<SignIn> {
               : _SupportState.unsupported),
         );
     Accounts().readAllSavedUsers().then((value) {
-      if (value == null) {
-        // no code to excute
-      } else {
-        showModalBottomSheet<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return SizedBox(
-              height: 300,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Center(
-                          child: Text(
-                        'Sign in with',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      )),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        myControllerForEmail.text = value
-                            .split(',')
-                            .first
-                            .split('[')
-                            .last
-                            .split('@')
-                            .last
-                            .trim();
-                        myControllerForStudentId.text = value
-                            .split(',')
-                            .first
-                            .split('[')
-                            .last
-                            .split('@')
-                            .first
-                            .trim();
-                        myControllerForStudentPassword.text =
-                            value.split(',').last.split(']').first.trim();
-                        Navigator.pop(context);
-                      },
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          children: [
-                            Container(
-                              decoration: const BoxDecoration(
-                                  // color: Color.fromARGB(37, 255, 255, 255),
+      Future.delayed(const Duration(seconds: 3), () {
+        if (value == null) {
+          // no code to excute
+        } else {
+          String emailId =
+              value.toString().split('  &&  ').first.split('@').last;
+          String schoolCode =
+              value.toString().split('  &&  ').first.split('@').first;
+          showModalBottomSheet<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return SizedBox(
+                height: 300,
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                            child: Text(
+                          'Sign in with',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        )),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          myControllerForSchoolCode.text = emailId;
+                          myControllerForStudentId.text = schoolCode;
+                          myControllerForStudentPassword.text =
+                              value.toString().split('  &&  ').last;
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => SignIn()),
+                          // );
+                          Navigator.pop(context);
+                        },
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                    // color: Color.fromARGB(37, 255, 255, 255),
+                                    ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.account_circle_outlined,
+                                        size: 50,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        'School code : $emailId \nAccount ID: $schoolCode   \nPassword : *********** ',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
                                   ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.account_circle_outlined,
-                                      color: Colors.white,
-                                      size: 50,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      'School code :   \nAccount ID:   \nPassword : *********** ',
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-        );
-      }
+              );
+            },
+          );
+        }
+      });
     });
   }
 
@@ -421,14 +418,14 @@ class _SignInState extends State<SignIn> {
     setState(() => _isAuthenticating = false);
   }
 
-  final myControllerForEmail = TextEditingController();
+  final myControllerForSchoolCode = TextEditingController();
   final myControllerForStudentId = TextEditingController();
   final myControllerForStudentPassword = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    myControllerForEmail.dispose();
+    myControllerForSchoolCode.dispose();
     myControllerForStudentId.dispose();
     myControllerForStudentPassword.dispose();
   }
@@ -480,7 +477,7 @@ class _SignInState extends State<SignIn> {
                 child: TextField(
                   // onChanged: (value) {
                   // },
-                  controller: myControllerForEmail,
+                  controller: myControllerForSchoolCode,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
                     labelText: 'Enter School Code'.tr(),

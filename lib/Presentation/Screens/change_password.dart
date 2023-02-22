@@ -138,15 +138,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                       child: ElevatedButton(
                         child: Text('Save The Password'.tr()),
                         onPressed: () {
+                          Accounts().saveUserPasswordAndId(
+                              Auth().currentUser!.email as String,
+                              rewritepasswordController.text);
                           if (writepasswordController.text ==
                                   rewritepasswordController.text &&
                               rewritepasswordController.text.length >= 8) {
                             Auth()
                                 .updatePassword(rewritepasswordController.text)
                                 .then((value) {
-                              Accounts().saveUserPasswordAndId(
-                                  Auth().currentUser!.email as String,
-                                  rewritepasswordController.text);
                               Navigator.pop(context);
 
                               final snackBar = SnackBar(
@@ -160,9 +160,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
                             }).onError((error, stackTrace) {
-                              setState(() {
-                                errorMessage = error.toString();
-                              });
+                              // setState(() {
+                              //   errorMessage = error.toString();
+                              // });
                             });
                           }
                         },

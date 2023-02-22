@@ -7,18 +7,15 @@ class Accounts {
   saveUserPasswordAndId(String emailId, String password) {
     storage.read(key: 'Accounts').then((value) {
       if (value == null) {
-        storage.write(key: 'Accounts', value: [emailId, password].toString());
+        storage.write(key: 'Accounts', value: '$emailId  &&  $password');
         debugPrint('first user');
       } else {
-        storage.write(key: 'Accounts', value: [emailId, password].toString());
-        debugPrint('update first user');
-        // if (value.split(' && ')[0] == [emailId, password].toString()) {
-        //   debugPrint('User already saved 1');
-        // } else {
-        //   // storage.write(
-        //   //     key: 'Accounts', value: '$value && ${[emailId, password]}');
-        //   // debugPrint('Another user');
-        // }
+        if (value == '$emailId  &&  $password') {
+          debugPrint('User Existed');
+        } else {
+          storage.write(key: 'Accounts', value: '$emailId  &&  $password');
+          debugPrint('User updated');
+        }
       }
     });
   }

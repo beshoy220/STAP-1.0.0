@@ -55,33 +55,28 @@ class AccountMaanger extends StatelessWidget {
                 ),
                 FutureBuilder(
                   future: Accounts().readAllSavedUsers(),
-                  initialData: {},
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    print(snapshot.data);
-                    Map map = snapshot.data as Map;
+                  initialData: [],
+                  builder: (BuildContext context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount:
-                              (map['Accounts'].split(' && ') as List).length,
+                          itemCount: 1,
                           itemBuilder: (BuildContext context, int index) {
-                            List list = map['Accounts'].split(' && ') as List;
-                            String emailId = list[index]
-                                .split(' , ')
+                            String emailId = snapshot.data
+                                .toString()
+                                .split('  &&  ')
                                 .first
                                 .split('@')
-                                .first
-                                .split('[')
-                                .last;
-                            String schoolCode = list[index]
-                                .split(' , ')
-                                .first
-                                .split('@')
-                                .last
-                                .split(',')
                                 .first;
-
+                            String schoolCode = snapshot.data
+                                .toString()
+                                .split('  &&  ')
+                                .first
+                                .split('@')
+                                .last;
+                            String password =
+                                snapshot.data.toString().split('  &&  ').last;
                             return Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: InkWell(
@@ -90,18 +85,8 @@ class AccountMaanger extends StatelessWidget {
                                     case 'pt':
                                       Auth()
                                           .signInWithEmailAndPassword(
-                                              email: list[index]
-                                                  .split(',')
-                                                  .first
-                                                  .split('[')
-                                                  .last
-                                                  .trim(),
-                                              password: list[index]
-                                                  .split(',')
-                                                  .last
-                                                  .split(']')
-                                                  .first
-                                                  .trim())
+                                              email: '$emailId@$schoolCode',
+                                              password: password)
                                           .then((value) {
                                         Navigator.pushReplacement(
                                           context,
@@ -114,18 +99,8 @@ class AccountMaanger extends StatelessWidget {
                                     case 'tc':
                                       Auth()
                                           .signInWithEmailAndPassword(
-                                              email: list[index]
-                                                  .split(',')
-                                                  .first
-                                                  .split('[')
-                                                  .last
-                                                  .trim(),
-                                              password: list[index]
-                                                  .split(',')
-                                                  .last
-                                                  .split(']')
-                                                  .first
-                                                  .trim())
+                                              email: '$emailId@$schoolCode',
+                                              password: password)
                                           .then((value) {
                                         Navigator.pushReplacement(
                                           context,
@@ -179,10 +154,13 @@ class AccountMaanger extends StatelessWidget {
                     onTap: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const WelcomeSingInMobile()),
+                        MaterialPageRoute(builder: (context) => SignIn()),
                       );
                       // Accounts().deleteAll();
+
+                      // Accounts().readAllSavedUsers().then(
+                      //       (value) => print(value),
+                      //     );
                       // Accounts().saveUserPasswordAndId(
                       //     'tc-20@school.com', '3038083031234');
                     },
