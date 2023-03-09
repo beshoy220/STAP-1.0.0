@@ -6,6 +6,7 @@ class Database {
   final ref = FirebaseDatabase.instance.ref();
 
   registeUserAccWithIcromentForParent(
+      String schoolCode,
       String grade,
       String classs,
       String name,
@@ -31,14 +32,14 @@ class Database {
       ref.child('user_email_num').update({'parent': newuserAcc});
       //
       Auth().createUserWithEmailAndPassword(
-          email: 'pt-$newuserAcc$i@school.com', password: nationalId);
+          email: 'pt-$newuserAcc$i@$schoolCode', password: nationalId);
       var newUserNode = {
         'name': name,
         'parent_name': parentName,
         'religion': religion,
         'national_id': nationalId,
         'phone_number': phone,
-        'email(id)': 'pt-$newuserAcc$i@school.com',
+        'email(id)': 'pt-$newuserAcc$i@$schoolCode',
         'birth_date': birthDate.toString(),
         'gender': gender,
       };
@@ -93,6 +94,7 @@ class Database {
   }
 
   registeUserAccWithIcromentForTeacher(
+    String schoolCode,
     String name,
     String religion,
     String nationalId,
@@ -120,14 +122,14 @@ class Database {
       ref.child('user_email_num').update({'teacher': newuserAcc});
       //
       Auth().createUserWithEmailAndPassword(
-          email: 'tc-$newuserAcc$i@school.com', password: nationalId);
+          email: 'tc-$newuserAcc$i@$schoolCode', password: nationalId);
 
       var newUserNode = {
         'name': name,
         'religion': religion,
         'national_id': nationalId,
         'phone_number': phone,
-        'email(id)': 'tc-$newuserAcc$i@school.com',
+        'email(id)': 'tc-$newuserAcc$i@$schoolCode',
         'birth_date': birthDate.toString(),
         'gender': gender,
         'stages': [stage1, stage2, stage3]

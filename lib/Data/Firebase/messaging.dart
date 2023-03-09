@@ -86,7 +86,7 @@ background() {
       RemoteMessage message) async {
     await Firebase.initializeApp();
     await FirebaseMessaging.instance.getInitialMessage();
-    await FirebaseMessaging.instance.subscribeToTopic('checkUp');
+    await FirebaseMessaging.instance.subscribeToTopic('topic');
     debugPrint("Handling a background message: ${message.messageId}");
   }
 }

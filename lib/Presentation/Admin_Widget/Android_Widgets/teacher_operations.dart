@@ -6,6 +6,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:number_selection/number_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:school_manager/App/meta.dart';
+import 'package:school_manager/Data/Firebase/authentication.dart';
 import 'package:school_manager/Data/Firebase/real_time_db.dart';
 import 'package:school_manager/Data/Local_providers/options_operations.dart';
 import 'package:school_manager/Data/Local_providers/stages.dart';
@@ -480,6 +481,7 @@ class _AddTeacherState extends State<AddTeacher> {
                       // print(forms[0]['national_id_controller'].text);
                       for (int i = 0; i < numOfForms; i++) {
                         Database().registeUserAccWithIcromentForTeacher(
+                            Auth().currentUser!.email!.split('@').last,
                             forms[i]['name_controller'].text,
                             forms[i]['religion_controller'].text,
                             forms[i]['national_id_controller'].text,

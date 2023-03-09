@@ -664,6 +664,7 @@ class _AddStudentState extends State<AddStudent> {
                           : debugPrint('no Users');
                       for (int i = 0; i < numOfForms; i++) {
                         db.registeUserAccWithIcromentForParent(
+                            Auth().currentUser!.email!.split('@').last,
                             widget.grade,
                             widget.classs,
                             forms[i]['name_controller'].text,
