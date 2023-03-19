@@ -61,6 +61,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   image_path: "assets/logo/STAP White.png"
+  # image_path: "assets/logo/STAPWhite.png"
 
   # flutter_native_splash:
   #   color: "#ffffff" 

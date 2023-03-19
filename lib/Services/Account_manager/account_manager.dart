@@ -13,7 +13,8 @@ class Accounts {
         if (value == '$emailId  &&  $password') {
           debugPrint('User Existed');
         } else {
-          storage.write(key: 'Accounts', value: '$emailId  &&  $password');
+          storage.write(
+              key: 'Accounts', value: '$value  ||  $emailId  &&  $password');
           debugPrint('User updated');
         }
       }

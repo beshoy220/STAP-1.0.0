@@ -1,10 +1,10 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:school_manager/App/meta.dart';
 import 'package:school_manager/Data/Firebase/authentication.dart';
-import 'package:school_manager/Data/Local_providers/options_operations.dart';
+// import 'package:school_manager/Data/Local_providers/options_operations.dart';
 import 'package:school_manager/Presentation/Screens/home_panal.dart';
 import 'package:school_manager/Presentation/Screens/teacher_panel.dart';
 import 'package:school_manager/Presentation/Screens/welcome_sign_in_page.dart';
@@ -61,16 +61,19 @@ class AccountMaanger extends StatelessWidget {
                       return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 1,
+                          itemCount:
+                              snapshot.data.toString().split('  ||  ').length,
                           itemBuilder: (BuildContext context, int index) {
                             String emailId = snapshot.data
                                 .toString()
+                                .split('  ||  ')[index]
                                 .split('  &&  ')
                                 .first
                                 .split('@')
                                 .first;
                             String schoolCode = snapshot.data
                                 .toString()
+                                .split('  ||  ')[index]
                                 .split('  &&  ')
                                 .first
                                 .split('@')
