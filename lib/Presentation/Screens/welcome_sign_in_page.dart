@@ -181,10 +181,6 @@ class _SignInState extends State<SignIn> {
         if (value == null) {
           // no code to excute
         } else {
-          String emailId =
-              value.toString().split('  &&  ').first.split('@').last;
-          String schoolCode =
-              value.toString().split('  &&  ').first.split('@').first;
           showModalBottomSheet<void>(
             context: context,
             builder: (BuildContext context) {
@@ -193,9 +189,7 @@ class _SignInState extends State<SignIn> {
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
+                    children: [
                       Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Center(
@@ -204,50 +198,94 @@ class _SignInState extends State<SignIn> {
                           style: Theme.of(context).textTheme.headlineMedium,
                         )),
                       ),
-                      InkWell(
-                        onTap: () {
-                          myControllerForSchoolCode.text = emailId;
-                          myControllerForStudentId.text = schoolCode;
-                          myControllerForStudentPassword.text =
-                              value.toString().split('  &&  ').last;
-                          // Navigator.pushReplacement(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => SignIn()),
-                          // );
-                          Navigator.pop(context);
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Row(
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                    // color: Color.fromARGB(37, 255, 255, 255),
+                      FutureBuilder(
+                        future: Accounts().readAllSavedUsers(),
+                        initialData: const [],
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount:
+                                snapshot.data.toString().split('  ||  ').length,
+                            itemBuilder: (BuildContext context, int index) {
+                              String emailId = snapshot.data
+                                  .toString()
+                                  .split('  ||  ')[index]
+                                  .split('  &&  ')
+                                  .first
+                                  .split('@')
+                                  .first;
+                              String schoolCode = snapshot.data
+                                  .toString()
+                                  .split('  ||  ')[index]
+                                  .split('  &&  ')
+                                  .first
+                                  .split('@')
+                                  .last;
+                              String password = snapshot.data
+                                  .toString()
+                                  .split('  ||  ')[index]
+                                  .split('  &&  ')
+                                  .last;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  InkWell(
+                                    onTap: () {
+                                      myControllerForStudentId.text = emailId;
+                                      myControllerForSchoolCode.text =
+                                          schoolCode;
+                                      myControllerForStudentPassword.text =
+                                          password;
+                                      // Navigator.pushReplacement(
+                                      //   context,
+                                      //   MaterialPageRoute(builder: (context) => SignIn()),
+                                      // );
+                                      Navigator.pop(context);
+                                    },
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                                // color: Color.fromARGB(37, 255, 255, 255),
+                                                ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(18.0),
+                                              child: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons
+                                                        .account_circle_outlined,
+                                                    size: 50,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    'School code : $emailId \nAccount ID: $schoolCode   \nPassword : *********** ',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.account_circle_outlined,
-                                        size: 50,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        'School code : $emailId \nAccount ID: $schoolCode   \nPassword : *********** ',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

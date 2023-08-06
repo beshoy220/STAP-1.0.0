@@ -61,22 +61,28 @@ class AccountMaanger extends StatelessWidget {
                       return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 1,
+                          itemCount:
+                              snapshot.data.toString().split('  ||  ').length,
                           itemBuilder: (BuildContext context, int index) {
                             String emailId = snapshot.data
                                 .toString()
+                                .split('  ||  ')[index]
                                 .split('  &&  ')
                                 .first
                                 .split('@')
                                 .first;
                             String schoolCode = snapshot.data
                                 .toString()
+                                .split('  ||  ')[index]
                                 .split('  &&  ')
                                 .first
                                 .split('@')
                                 .last;
-                            String password =
-                                snapshot.data.toString().split('  &&  ').last;
+                            String password = snapshot.data
+                                .toString()
+                                .split('  ||  ')[index]
+                                .split('  &&  ')
+                                .last;
                             return Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: InkWell(
@@ -131,7 +137,7 @@ class AccountMaanger extends StatelessWidget {
                                         Expanded(
                                             flex: 4,
                                             child: Text(
-                                              'School code :  $emailId \nAccount ID: $schoolCode  \n\nPassword : *********** ',
+                                              'School code :  $emailId \nAccount ID:  $schoolCode  \n\nPassword : *********** ',
                                               style: const TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold),
@@ -158,11 +164,11 @@ class AccountMaanger extends StatelessWidget {
                       );
                       // Accounts().deleteAll();
 
+                      // Accounts()
+                      //     .saveUserPasswordAndId('tc-230@school.com', '0304');
                       // Accounts().readAllSavedUsers().then(
                       //       (value) => print(value),
                       //     );
-                      // Accounts().saveUserPasswordAndId(
-                      //     'tc-20@school.com', '3038083031234');
                     },
                     child: Container(
                       decoration: const BoxDecoration(
