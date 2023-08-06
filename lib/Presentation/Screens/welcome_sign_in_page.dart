@@ -198,78 +198,50 @@ class _SignInState extends State<SignIn> {
                           style: Theme.of(context).textTheme.headlineMedium,
                         )),
                       ),
-                      ListView.builder(
-                        itemCount: value.toString().split('  ||  ').length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          String emailId = value
-                              .toString()
-                              .split('  ||  ')[index]
-                              .split('  &&  ')
-                              .first
-                              .split('@')
-                              .last;
-                          String schoolCode = value
-                              .toString()
-                              .split('  ||  ')[index]
-                              .split('  &&  ')
-                              .first
-                              .split('@')
-                              .first;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              InkWell(
-                                onTap: () {
-                                  myControllerForSchoolCode.text = emailId;
-                                  myControllerForStudentId.text = schoolCode;
-                                  myControllerForStudentPassword.text =
-                                      value.toString().split('  &&  ').last;
-                                  // Navigator.pushReplacement(
-                                  //   context,
-                                  //   MaterialPageRoute(builder: (context) => SignIn()),
-                                  // );
-                                  Navigator.pop(context);
-                                },
-                                child: SizedBox(
-                                  width: MediaQuery.of(context).size.width,
+                      InkWell(
+                        onTap: () {
+                          myControllerForSchoolCode.text = emailId;
+                          myControllerForStudentId.text = schoolCode;
+                          myControllerForStudentPassword.text =
+                              value.toString().split('  &&  ').last;
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => SignIn()),
+                          // );
+                          Navigator.pop(context);
+                        },
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                    // color: Color.fromARGB(37, 255, 255, 255),
+                                    ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(18.0),
                                   child: Row(
                                     children: [
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                            // color: Color.fromARGB(37, 255, 255, 255),
-                                            ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18.0),
-                                          child: Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.account_circle_outlined,
-                                                size: 50,
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                'School code : $emailId \nAccount ID: $schoolCode   \nPassword : *********** ',
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
-                                        ),
+                                      const Icon(
+                                        Icons.account_circle_outlined,
+                                        size: 50,
                                       ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        'School code : $emailId \nAccount ID: $schoolCode   \nPassword : *********** ',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
                                     ],
                                   ),
                                 ),
-                              )
+                              ),
                             ],
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
